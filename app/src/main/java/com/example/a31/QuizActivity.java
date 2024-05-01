@@ -1,6 +1,8 @@
 package com.example.a31;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -39,8 +41,7 @@ public class QuizActivity extends AppCompatActivity {
             buttons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    checkAnswer(buttons[finalI].getText().toString());
-                    loadNextQuestion();
+                    checkAnswer(buttons[finalI].getText().toString(), buttons[finalI]);
                 }
             });
         }
@@ -56,28 +57,31 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void displayQuestion() {
-        Question currentQuestion = questions.get(currentQuestionIndex);
-        textViewQuestion.setText(currentQuestion.getQuestionText());
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setText(currentQuestion.getOptions()[i]);
-        }
-    }
-
-    private void checkAnswer(String selectedAnswer) {
-        Question currentQuestion = questions.get(currentQuestionIndex);
-        if (selectedAnswer.equals(currentQuestion.getCorrectAnswer())) {
-            // Correct answer logic
-        } else {
-            // Wrong answer logic
-        }
-    }
-
-    private void loadNextQuestion() {
-        currentQuestionIndex++;
         if (currentQuestionIndex < questions.size()) {
-            displayQuestion();
+            Question currentQuestion = questions.get(currentQuestionIndex);
+            textViewQuestion.setText(currentQuestion.getQuestionText());
+            for (int i = 0; i < buttons.length; i++) {
+                buttons[i].setText(currentQuestion.getOptions()[i]);
+                buttons[i].setBackgroundColor(Color.LTGRAY); // Reset the color for new question
+            }
+            progressBar.setProgress(currentQuestionIndex + 1);
         } else {
-            // Finish quiz and go to score activity
+//            finishQuiz(); // Implement this method to handle finishing the quiz
         }
+    }
+
+    private void checkAnswer(String selectedAnswer, Button selectedButton) {
+        Question currentQuestion = questions.get(currentQuestionIndex);
+        boolean isCorrect = selectedAnswer.equals(currentQuestion.getCorrectAnswer());
+        selectedButton.setBackgroundColor(isCorrect ? Color.GREEN : Color.RED);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                selectedButton.setBackgroundColor(Color.LTGRAY); // Reset color after display
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }, 1000); // Delay of 1 second to show color before moving to the next question
     }
 }

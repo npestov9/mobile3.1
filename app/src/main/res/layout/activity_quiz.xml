@@ -23,23 +23,27 @@
         android:id="@+id/buttonAnswer1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/buttonAnswer2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:layout_marginTop="8dp"/>
 
     <Button
         android:id="@+id/buttonAnswer3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:layout_marginTop="8dp"/>
 
     <Button
         android:id="@+id/buttonAnswer4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:layout_marginTop="8dp"/>
 </LinearLayout>
