@@ -1,5 +1,6 @@
 package com.example.a31;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,12 +21,16 @@ public class QuizActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private List<Question> questions = new ArrayList<>();
     private int currentQuestionIndex = 0;
+    int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+        setupQuiz();
+    }
 
+    private void setupQuiz() {
         textViewQuestion = findViewById(R.id.textViewQuestion);
         buttons[0] = findViewById(R.id.buttonAnswer1);
         buttons[1] = findViewById(R.id.buttonAnswer2);
@@ -34,10 +39,12 @@ public class QuizActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         initializeQuestions();
+        currentQuestionIndex = 0; // Reset the question index
+        score = 0; // Reset the score
         displayQuestion();
 
         for (int i = 0; i < buttons.length; i++) {
-            final int finalI = i;
+            int finalI = i;
             buttons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -66,14 +73,26 @@ public class QuizActivity extends AppCompatActivity {
             }
             progressBar.setProgress(currentQuestionIndex + 1);
         } else {
-//            finishQuiz(); // Implement this method to handle finishing the quiz
+            finishQuiz();
         }
+    }
+
+    private void finishQuiz() {
+        int finalScore = score; // Assuming 'score' is the variable that holds the final score count
+        Intent intent = new Intent(QuizActivity.this, ScoreActivity.class);
+        intent.putExtra("SCORE", finalScore); // Use a simple and clear key, typically a constant
+        startActivity(intent);
+        finish(); // Close the QuizActivity
     }
 
     private void checkAnswer(String selectedAnswer, Button selectedButton) {
         Question currentQuestion = questions.get(currentQuestionIndex);
         boolean isCorrect = selectedAnswer.equals(currentQuestion.getCorrectAnswer());
         selectedButton.setBackgroundColor(isCorrect ? Color.GREEN : Color.RED);
+
+        if (isCorrect){
+            score += 1;
+        }
 
         new Handler().postDelayed(new Runnable() {
             @Override

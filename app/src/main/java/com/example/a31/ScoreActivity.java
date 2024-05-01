@@ -21,26 +21,29 @@ public class ScoreActivity extends AppCompatActivity {
         Button buttonTakeNewQuiz = findViewById(R.id.buttonTakeNewQuiz);
         Button buttonFinish = findViewById(R.id.buttonFinish);
 
-        // Assuming the score is passed as an Intent extra
         int score = getIntent().getIntExtra("SCORE", 0);
-        textViewFinalScore.setText("Your final score:" + score);
+        textViewFinalScore.setText("Score: " + score + "/5");
 
         buttonTakeNewQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent to restart the MainActivity
+                // Intent to restart the MainActivity for a new quiz
                 Intent intent = new Intent(ScoreActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finish();  // Finish ScoreActivity to clear it from the back stack
             }
         });
 
-        buttonFinish.setOnClickListener(new View.OnClickListener() {
+        buttonTakeNewQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Finish the app
-                finishAffinity();  // Closes all activities in the stack
+                Intent intent = new Intent(ScoreActivity.this, QuizActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Clear the activity stack
+                startActivity(intent);
+                finish();
             }
         });
+
     }
 }
